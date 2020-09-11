@@ -1,38 +1,20 @@
 image: maven:3-jdk-11
 
-stages:
-    - build
-    - test
-    - checkstyle
-    - deploy-staging
-
-build_edream:
-  stage: build
-  script: 
-    - echo "Building DEMO app"
-    - mvn clean install
-
-test_edream:
-    stage: test
-    script:
-    - echo "Test DEMO app"
-    - mvn test && mvn jacoco:report
-    coverage: "/Total.*?([0-9]{1,3})%/"
-
-checkstyle_edream:
-    stage: checkstyle
-    script:
-    - echo "Checkstyle DEMO app"
-    - mvn checkstyle:check
-
-staging:
-    type: deploy
-    stage: deploy-staging
-    image: ruby:latest
-    script:
+before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
+
+
+stages:
+    - deploy-staging
+
+
+
+staging:
+    stage: deploy-staging
+    image: ruby:latest
+    script:
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
     only:
         - master
