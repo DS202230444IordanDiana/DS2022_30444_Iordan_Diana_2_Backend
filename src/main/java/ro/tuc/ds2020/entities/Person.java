@@ -7,10 +7,7 @@ import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.UUID;
 
-
-
 @Entity
-@Table(name = "person")
 public class Person  implements Serializable{
 
     private static final long serialVersionUID = 1L;

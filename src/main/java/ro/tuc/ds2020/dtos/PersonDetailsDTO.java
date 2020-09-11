@@ -18,6 +18,12 @@ public class PersonDetailsDTO {
     public PersonDetailsDTO() {
     }
 
+    public PersonDetailsDTO( String name, String address, int age) {
+        this.name = name;
+        this.address = address;
+        this.age = age;
+    }
+
     public PersonDetailsDTO(UUID id, String name, String address, int age) {
         this.id = id;
         this.name = name;
