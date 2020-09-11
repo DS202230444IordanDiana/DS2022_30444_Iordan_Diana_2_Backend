@@ -1,20 +1,27 @@
-image: maven:3-jdk-11
-
-before_script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-
-
 stages:
-    - deploy-staging
+  - build
+  - test
+  - deploy
+
+maven-build:
+  image: maven:3-jdk-8
+  stage: build
+  script: "mvn package -B"
+
+maven-test:
+  image: maven:3-jdk-8
+  stage: test
+  script: "mvn test -B"
+
+deploy:
+  stage: deploy
+  image: ruby:latest
+  script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+  only:
+  - master
 
 
-
-staging:
-    stage: deploy-staging
-    image: ruby:latest
-    script:
-    - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
-    only:
-        - master
