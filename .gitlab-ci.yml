@@ -27,7 +27,7 @@ checkstyle_edream:
 
 staging:
     type: deploy
-    stage: staging
+    stage: deploy-staging
     image: maven:3-jdk-11
     script:
         - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
