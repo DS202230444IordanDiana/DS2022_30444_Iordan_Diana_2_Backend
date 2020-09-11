@@ -1,6 +1,7 @@
 package ro.tuc.ds2020.entities;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ public class Person  implements Serializable{
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "id", columnDefinition = "BINARY(16)")
+    @Type(type = "uuid-binary")
     private UUID id;
 
     @Column(name = "name", nullable = false)
