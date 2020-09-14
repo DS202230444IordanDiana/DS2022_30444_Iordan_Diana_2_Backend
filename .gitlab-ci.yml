@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - checkstyle
+  - deploy
 
 build:
   stage: build
@@ -25,3 +26,19 @@ checkstyle:
     script:
     - echo "Checkstyle DEMO app"
     - mvn checkstyle:check
+
+deploy_staging:
+  stage: deploy
+  image: ruby:2.3
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=spring-demo-ds2020 --api-key=$HEROKU_API_KEY
+  environment:
+    name: staging
+    url: https://spring-demo-ds2020.herokuapp.com/
+  only:
+    - master
+
+    
