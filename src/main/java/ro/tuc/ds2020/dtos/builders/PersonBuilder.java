@@ -10,7 +10,7 @@ public class PersonBuilder {
     }
 
     public static PersonDTO toPersonDTO(Person person) {
-        return new PersonDTO(person.getId(), person.getName());
+        return new PersonDTO(person.getId(), person.getName(), person.getAge());
     }
 
     public static Person toEntity(PersonDetailsDTO personDetailsDTO) {

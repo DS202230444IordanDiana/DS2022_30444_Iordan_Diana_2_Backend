@@ -6,13 +6,15 @@ import java.util.UUID;
 public class PersonDTO {
     private UUID id;
     private String name;
+    private int age;
 
     public PersonDTO() {
     }
 
-    public PersonDTO(UUID id, String name) {
+    public PersonDTO(UUID id, String name, int age) {
         this.id = id;
         this.name = name;
+        this.age = age;
     }
 
     public UUID getId() {
@@ -31,17 +33,25 @@ public class PersonDTO {
         this.name = name;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersonDTO personDTO = (PersonDTO) o;
-        return Objects.equals(id, personDTO.id) &&
+        return age == personDTO.age &&
                 Objects.equals(name, personDTO.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name, age);
     }
 }
