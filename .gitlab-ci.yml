@@ -39,6 +39,6 @@ deploy_staging:
     name: staging
     url: https://spring-demo-ds2020.herokuapp.com/
   only:
-    - master
+    - production
 
     
