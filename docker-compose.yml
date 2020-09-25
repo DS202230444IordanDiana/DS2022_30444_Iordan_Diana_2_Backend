@@ -1,15 +1,12 @@
-version: '2'
+version: '3'
 
 services:
 
-tuc-resource-api:
-    image: tuc-resource-api
-    hostname: tuc-resource-api
-    container_name: tuc-resource-api
+  tomcat-db-api:
+    image: registry.heroku.com/spring-demo-ds2020/web
     environment:
-          - MYSQL_IP=tuc-db
-          - MYSQL_PORT=3306
-          - MYSQL_USER=root
-          - MYSQL_PASSWORD=tuc-password
-          - MYSQL_DBNAME=edream-prediction-certh1
-
+       - MYSQL_IP=172.21.0.10
+       - MYSQL_PORT=3306
+       - MYSQL_USER=root
+       - MYSQL_PASSWORD=tuc-password
+       - MYSQL_DBNAME=edream-prediction-certh
