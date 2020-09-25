@@ -21,7 +21,7 @@ build_image:
   - docker:dind
   stage: package
   script:
-    - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
+    - docker login --username=gitlab+deploy-token-239583 --password=_Sr5gogGnkiWiRVeFAMy registry.gitlab.com
     - docker build -t $GITLAB_REGISTRY_LOCATION .
     - docker push $GITLAB_REGISTRY_LOCATION:latest
 
