@@ -1,44 +1,40 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  
 stages:
-  - build
-  - test
-  - checkstyle
-  - deploy
+    - package
+    - deploy
+  
+variables:
+    APP_NAME: spring-demo-ds2020
+    HEROKU_REGISTRY_LOCATION: registry.heroku.com/spring-demo-ds2020/web
+    GITLAB_REGISTRY_LOCATION: gitlab.com/ds_20201/spring-demo/spring-demo-ds2020
 
-build:
-  stage: build
-  image: maven:3.3.9-jdk-8
+build_image:
+  image: docker:latest
+  services:
+  - docker:dind
+  stage: package
   script:
-    - mvn clean package
+    - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest
 
-test:
-    stage: test
-    image: maven:3.3.9-jdk-8
-    script:
-    - echo "Test DEMO app"
-    - mvn test && mvn jacoco:report
-    - cat target/site/jacoco/index.html | grep -o '.*'
-    coverage: "/Total.*?([0-9]{1,3})%/"
-
-
-checkstyle:
-    stage: checkstyle
-    image: maven:3.3.9-jdk-8
-    script:
-    - echo "Checkstyle DEMO app"
-    - mvn checkstyle:check
-
-deploy_staging:
+deploy:
   stage: deploy
-  image: ruby:2.3
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=spring-demo-ds2020 --api-key=$HEROKU_API_KEY
-  environment:
-    name: staging
-    url: https://spring-demo-ds2020.herokuapp.com/
   only:
-    - production
+    - docker_production
+  script:
+    - docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
+    - docker pull $CI_REGISTRY_IMAGE:latest
+    - docker tag $CI_REGISTRY_IMAGE:latest $HEROKU_REGISTRY_LOCATION:latest
+    - docker push $HEROKU_REGISTRY_LOCATION:latest
+    - docker run --rm -e HEROKU_API_KEY=$HEROKU_TOKEN wingrunr21/alpine-heroku-cli container:release web --app $APP_NAME
 
-    
