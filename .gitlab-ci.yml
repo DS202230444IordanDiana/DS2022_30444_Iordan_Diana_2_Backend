@@ -7,19 +7,32 @@ variables:
   DOCKER_DRIVER: overlay
   
 stages:
+    - build
     - deploy
   
 variables:
     APP_NAME: spring-demo-ds2020
-    REGISTRY_LOCATION: registry.heroku.com/spring-demo-ds2020/web
+    HEROKU_REGISTRY_LOCATION: registry.heroku.com/spring-demo-ds2020/web
+    GITLAB_REGISTRY_LOCATION: registry.gitlab.com/spring-demo-ds2020
+
+build_image:
+  image: docker:latest
+  services:
+  - docker:dind
+  stage: package
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t $GITLAB_REGISTRY_LOCATION.
+    - docker push $GITLAB_REGISTRY_LOCATION:latest
 
 deploy:
   stage: deploy
   only:
     - docker_production
   script:
-    - docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
-    - docker build -t $APP_NAME .
-    - docker push $REGISTRY_LOCATION
+    - docker login --email=_ --username=_ --password=$HEROKU_TOKEN registry.heroku.com
+    - docker pull $GITLAB_REGISTRY_LOCATION:latest
+    - docker tag $GITLAB_REGISTRY_LOCATION:latest $HEROKU_REGISTRY_LOCATION:latest
+    - docker push $HEROKU_REGISTRY_LOCATION:latest
     - docker run --rm -e HEROKU_API_KEY=$HEROKU_TOKEN wingrunr21/alpine-heroku-cli container:release web --app $APP_NAME
-    
+
