@@ -13,7 +13,7 @@ stages:
 variables:
     APP_NAME: spring-demo-ds2020
     HEROKU_REGISTRY_LOCATION: registry.heroku.com/spring-demo-ds2020/web
-    GITLAB_REGISTRY_LOCATION: registry.gitlab.com/spring-demo-ds2020
+    GITLAB_REGISTRY_LOCATION: gitlab.com/ds_20201/spring-demo/spring-demo-ds2020
 
 build_image:
   image: docker:latest
