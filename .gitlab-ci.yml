@@ -22,7 +22,7 @@ build_image:
   stage: package
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker build -t $GITLAB_REGISTRY_LOCATION.
+    - docker build -t $GITLAB_REGISTRY_LOCATION .
     - docker push $GITLAB_REGISTRY_LOCATION:latest
 
 deploy:
