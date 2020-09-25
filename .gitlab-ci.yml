@@ -1,6 +1,5 @@
 image: docker:latest
 
-
 before_script:
     - apk --no-cache add curl
     - apk add --no-cache py-pip 
@@ -14,12 +13,10 @@ variables:
     APP_NAME: spring-demo-ds2020
     REGISTRY_LOCATION: registry.heroku.com/spring-demo-ds2020/web
 
-deploy_stg:
+stages:
   stage: deploy
-  tags:
-    - docker
   only:
-    - master
+    - docker_production
   script:
     - docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
     - docker build -t $APP_NAME .
