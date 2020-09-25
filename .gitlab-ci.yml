@@ -30,7 +30,7 @@ deploy:
   only:
     - docker_production
   script:
-    - docker login --email=_ --username=_ --password=$HEROKU_TOKEN registry.heroku.com
+    - docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
     - docker pull $GITLAB_REGISTRY_LOCATION:latest
     - docker tag $GITLAB_REGISTRY_LOCATION:latest $HEROKU_REGISTRY_LOCATION:latest
     - docker push $HEROKU_REGISTRY_LOCATION:latest
