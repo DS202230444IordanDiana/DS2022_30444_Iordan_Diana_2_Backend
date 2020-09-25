@@ -13,7 +13,7 @@ variables:
     APP_NAME: spring-demo-ds2020
     REGISTRY_LOCATION: registry.heroku.com/spring-demo-ds2020/web
 
-stages:
+deploy:
   stage: deploy
   only:
     - docker_production
