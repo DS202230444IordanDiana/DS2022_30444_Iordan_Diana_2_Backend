@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>ds-2020</name>
     <description>Demo project for Spring Boot</description>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -90,6 +90,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
