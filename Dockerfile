@@ -18,8 +18,11 @@ ENV DB_USER=wlryktxyqpyomt
 ENV DB_PASSWORD=bee98a2afc7f0c3bcdd7df60ee7278ec5fa5cb4fb06a4039b1ffb1107d5851fd
 ENV DB_DBNAME=devidei2vqv0v4
 
+
 COPY --from=builder /root/dependencies/ ./
 COPY --from=builder /root/snapshot-dependencies/ ./
+
+RUN sleep 10
 COPY --from=builder /root/spring-boot-loader/ ./
 COPY --from=builder /root/application/ ./
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher","-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m"]
