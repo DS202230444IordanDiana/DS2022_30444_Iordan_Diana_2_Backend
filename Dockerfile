@@ -12,3 +12,5 @@ FROM tomcat:8
 ENV TZ=UTC
 CMD  /usr/local/tomcat/bin/catalina.sh run
 COPY --from=build /root/target/ds-2020-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ds-2020-0.0.1-SNAPSHOT.war
+
+EXPOSE 8080
