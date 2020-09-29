@@ -1,14 +1,9 @@
 stages:
-  - build
   - test
   - checkstyle
+  - build
   - deploy
 
-build:
-  stage: build
-  image: maven:3.3.9-jdk-8
-  script:
-    - mvn clean package
 
 test:
     stage: test
@@ -27,6 +22,12 @@ checkstyle:
     - echo "Checkstyle DEMO app"
     - mvn checkstyle:check
 
+build:
+  stage: build
+  image: maven:3.3.9-jdk-8
+  script:
+    - mvn clean package
+    
 deploy_staging:
   stage: deploy
   image: ruby:2.3
