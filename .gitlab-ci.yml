@@ -7,7 +7,6 @@ variables:
   
 variables:
     APP_NAME: spring-demo-ds2020
-    HEROKU_IMAGE: registry.heroku.com/spring-demo-ds2020/web
 
 build_image:
   image: docker:latest
@@ -29,9 +28,9 @@ deploy:
   only:
     - docker_production
   script:
-    - docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
+    - docker login --username=_ --password=$HEROKU_API_KEY $HEROKU_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE:latest
-    - docker tag $CI_REGISTRY_IMAGE:latest $HEROKU_IMAGE:latest
-    - docker push $HEROKU_IMAGE:latest
-    - docker run --rm -e HEROKU_API_KEY=$HEROKU_TOKEN wingrunr21/alpine-heroku-cli container:release web --app $APP_NAME
+    - docker tag $CI_REGISTRY_IMAGE:latest $HEROKU_REGISTRY_IMAGE:latest
+    - docker push $HEROKU_REGISTRY_IMAGE:latest
+    - docker run --rm -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli container:release web --app $APP_NAME
 
