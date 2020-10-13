@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-
-  romcat-db-api:
-    image: registry.heroku.com/spring-demo-ds2020/web
-    ports:
-       - "8080:8080"
