@@ -30,8 +30,8 @@ public class PersonServiceIntegrationTests extends Ds2020TestConfig {
         PersonDetailsDTO p = new PersonDetailsDTO("John", "Somewhere Else street", 22);
         UUID insertedID = personService.insert(p);
 
-        PersonDTO insertedPerson = new PersonDTO(insertedID, p.getName(), p.getAge());
-        PersonDTO fetchedPerson = personService.findPersonById(insertedID);
+        PersonDetailsDTO insertedPerson = new PersonDetailsDTO(insertedID, p.getName(),p.getAddress(), p.getAge());
+        PersonDetailsDTO fetchedPerson = personService.findPersonById(insertedID);
 
         assertEquals("Test Inserted Person", insertedPerson, fetchedPerson);
     }

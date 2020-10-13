@@ -33,13 +33,13 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
-    public PersonDTO findPersonById(UUID id) {
+    public PersonDetailsDTO findPersonById(UUID id) {
         Optional<Person> prosumerOptional = personRepository.findById(id);
         if (!prosumerOptional.isPresent()) {
             LOGGER.error("Person with id {} was not found in db", id);
             throw new ResourceNotFoundException(Person.class.getSimpleName() + " with id: " + id);
         }
-        return PersonBuilder.toPersonDTO(prosumerOptional.get());
+        return PersonBuilder.toPersonDetailsDTO(prosumerOptional.get());
     }
 
     public UUID insert(PersonDetailsDTO personDTO) {

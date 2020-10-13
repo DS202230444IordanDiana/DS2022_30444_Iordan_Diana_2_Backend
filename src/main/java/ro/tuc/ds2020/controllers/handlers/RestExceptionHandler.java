@@ -63,8 +63,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler(value = {ResourceNotFoundException.class, DuplicateResourceException.class, EntityValidationException.class})
-    protected ResponseEntity<Object> handleResourceNotFound(CustomException ex,
+    @ExceptionHandler(value = {CustomException.class})
+    protected ResponseEntity<Object> handleCustomExceptions(CustomException ex,
                                                             WebRequest request) {
         ExceptionHandlerResponseDTO errorInformation = new ExceptionHandlerResponseDTO(ex.getResource(),
                 ex.getStatus().getReasonPhrase(),
