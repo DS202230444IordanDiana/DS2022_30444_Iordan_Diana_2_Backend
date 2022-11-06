@@ -8,12 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.tuc.ds2020.dtos.PersonDTO;
 import ro.tuc.ds2020.dtos.PersonDetailsDTO;
-import ro.tuc.ds2020.entities.Person;
 import ro.tuc.ds2020.services.PersonService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -42,17 +40,26 @@ public class PersonController {
     }
 
     @PostMapping()
-    public ResponseEntity<UUID> insertProsumer(@Valid @RequestBody PersonDetailsDTO personDTO) {
-        UUID personID = personService.insert(personDTO);
+    public ResponseEntity<Long> insertPerson(@Valid @RequestBody PersonDetailsDTO personDTO) {
+        Long personID = personService.insert(personDTO);
         return new ResponseEntity<>(personID, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<PersonDetailsDTO> getPerson(@PathVariable("id") UUID personId) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<PersonDetailsDTO> getPerson(@PathVariable("id") Long personId) {
         PersonDetailsDTO dto = personService.findPersonById(personId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    //TODO: UPDATE, DELETE per resource
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Long> deletePerson(@PathVariable("id") Long personId) {
+        personService.deleteById(personId);
+        return new ResponseEntity<>(personId, HttpStatus.OK);
+    }
 
+    @PutMapping(path = "/update")
+    public ResponseEntity<PersonDetailsDTO> updatePersonDetails(@Valid @RequestBody PersonDTO personDTO) {
+        PersonDetailsDTO personDetailsDTO =  personService.updatePersonDetails(personDTO);
+        return new ResponseEntity<>(personDetailsDTO, HttpStatus.OK);
+    }
 }

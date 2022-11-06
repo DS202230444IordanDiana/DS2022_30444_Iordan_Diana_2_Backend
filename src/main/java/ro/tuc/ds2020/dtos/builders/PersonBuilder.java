@@ -2,7 +2,7 @@ package ro.tuc.ds2020.dtos.builders;
 
 import ro.tuc.ds2020.dtos.PersonDTO;
 import ro.tuc.ds2020.dtos.PersonDetailsDTO;
-import ro.tuc.ds2020.entities.Person;
+import ro.tuc.ds2020.entities.users.Person;
 
 public class PersonBuilder {
 
@@ -14,12 +14,14 @@ public class PersonBuilder {
     }
 
     public static PersonDetailsDTO toPersonDetailsDTO(Person person) {
-        return new PersonDetailsDTO(person.getId(), person.getName(), person.getAddress(), person.getAge());
+        return new PersonDetailsDTO(person.getId(), person.getUsername(), person.getName(), person.getAddress(), person.getAge());
     }
 
     public static Person toEntity(PersonDetailsDTO personDetailsDTO) {
-        return new Person(personDetailsDTO.getName(),
+        return new Person(personDetailsDTO.getUsername(),
+                personDetailsDTO.getName(),
                 personDetailsDTO.getAddress(),
-                personDetailsDTO.getAge());
+                personDetailsDTO.getAge(),
+                personDetailsDTO.getPassword());
     }
 }

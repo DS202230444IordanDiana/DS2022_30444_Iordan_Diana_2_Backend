@@ -28,7 +28,7 @@ public class PersonServiceIntegrationTests extends Ds2020TestConfig {
     @Test
     public void testInsertCorrectWithGetById() {
         PersonDetailsDTO p = new PersonDetailsDTO("John", "Somewhere Else street", 22);
-        UUID insertedID = personService.insert(p);
+        Long insertedID = personService.insert(p);
 
         PersonDetailsDTO insertedPerson = new PersonDetailsDTO(insertedID, p.getName(),p.getAddress(), p.getAge());
         PersonDetailsDTO fetchedPerson = personService.findPersonById(insertedID);
