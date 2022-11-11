@@ -40,14 +40,6 @@ public class PersonDetailsDTO {
         this.age = age;
     }
 
-    public PersonDetailsDTO( String username, String name, String address, int age, String password) {
-        this.username = username;
-        this.name = name;
-        this.address = address;
-        this.age = age;
-        this.password = password;
-    }
-
     public PersonDetailsDTO(Long id, String name, String address, int age) {
         this.id = id;
         this.name = name;

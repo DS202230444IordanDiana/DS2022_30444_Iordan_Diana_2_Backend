@@ -36,9 +36,8 @@ public class PersonService {
 
     public PersonDetailsDTO findPersonById(Long id) {
         Optional<Person> prosumerOptional = personRepository.findById(id);
-        log.info("ID WAS : {}" + id.toString());
         if (!prosumerOptional.isPresent()) {
-            LOGGER.error("Person with id {} was not found in db", id);
+            log.error("Person with id {} was not found in db", id);
             throw new ResourceNotFoundException(Person.class.getSimpleName() + " with id: " + id);
         }
         return PersonBuilder.toPersonDetailsDTO(prosumerOptional.get());
@@ -52,7 +51,6 @@ public class PersonService {
     }
 
     public Long deleteById(Long id) {
-        // TODO: add validations for deleting an item
         personRepository.deleteById(id);
         LOGGER.info("Person with username {} was deleted from db", id);
         return id;
@@ -61,7 +59,6 @@ public class PersonService {
     public PersonDetailsDTO updatePersonDetails(PersonDTO personDTO) {
 
         Person person = updateUserFields(personDTO);
-        // TODO: check for empty inputs and update only the ones that need to be updated
         return PersonBuilder.toPersonDetailsDTO(personRepository.save(person));
     }
 
