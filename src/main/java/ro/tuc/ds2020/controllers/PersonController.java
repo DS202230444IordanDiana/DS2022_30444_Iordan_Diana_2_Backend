@@ -33,7 +33,7 @@ public class PersonController {
         List<PersonDTO> dtos = personService.findPersons();
         for (PersonDTO dto : dtos) {
             Link personLink = linkTo(methodOn(PersonController.class)
-                    .getPerson(dto.getId())).withRel("personDetails");
+                    .getPersonById(dto.getId())).withRel("personDetails");
             dto.add(personLink);
         }
         return new ResponseEntity<>(dtos, HttpStatus.OK);
@@ -46,8 +46,14 @@ public class PersonController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<PersonDetailsDTO> getPerson(@PathVariable("id") Long personId) {
+    public ResponseEntity<PersonDetailsDTO> getPersonById(@PathVariable("id") Long personId) {
         PersonDetailsDTO dto = personService.findPersonById(personId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get/{username}")
+    public ResponseEntity<PersonDetailsDTO> getPersonByUsername(@PathVariable("username") String username) {
+        PersonDetailsDTO dto = personService.findPersonByUsername(username);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

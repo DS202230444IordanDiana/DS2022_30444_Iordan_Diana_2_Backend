@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ro.tuc.ds2020.entities.Device;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -29,7 +30,7 @@ public class Person extends User implements Serializable {
     @Column( nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<Device> devices;
 
     public Person() {

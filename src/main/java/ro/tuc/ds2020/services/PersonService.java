@@ -46,13 +46,13 @@ public class PersonService {
     public Long insert(PersonDetailsDTO personDTO) {
         Person person = PersonBuilder.toEntity(personDTO);
         person = personRepository.save(person);
-        LOGGER.debug("Person with id {} was inserted in db", person.getId());
+        log.info("Person with id {} was inserted in db", person.getId());
         return person.getId();
     }
 
     public Long deleteById(Long id) {
         personRepository.deleteById(id);
-        LOGGER.info("Person with username {} was deleted from db", id);
+        log.info("Person with username {} was deleted from db", id);
         return id;
     }
 
@@ -91,5 +91,14 @@ public class PersonService {
             }
         }
         return updatedPerson;
+    }
+
+    public PersonDetailsDTO findPersonByUsername(String username) {
+        Optional<Person> prosumerOptional = personRepository.findByUsername(username);
+        if (!prosumerOptional.isPresent()) {
+            log.error("Person with username {} was not found in db", username);
+            throw new ResourceNotFoundException(Person.class.getSimpleName() + " with id: " + username);
+        }
+        return PersonBuilder.toPersonDetailsDTO(prosumerOptional.get());
     }
 }

@@ -10,7 +10,7 @@ public class PersonBuilder {
     }
 
     public static PersonDTO toPersonDTO(Person person) {
-        return new PersonDTO(person.getId(), person.getName(), person.getAge());
+        return new PersonDTO(person.getId(), person.getName(), person.getAddress(),person.getAge(), person.getPassword(), person.getUsername());
     }
 
     public static PersonDetailsDTO toPersonDetailsDTO(Person person) {
