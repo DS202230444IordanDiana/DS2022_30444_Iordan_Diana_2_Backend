@@ -13,9 +13,9 @@ FROM openjdk:11.0.6-jre
 
 ENV TZ=UTC
 ENV DB_IP=ec2-52-48-65-240.eu-west-1.compute.amazonaws.com
-ENV DB_PORT=3306
+ENV DB_PORT=6603
 ENV DB_USER=root
-ENV DB_PASSWORD=root
+ENV DB_PASSWORD=Vz%3?9It,g.FDr:+7dj61T:mRyd155&q
 ENV DB_DBNAME=monitoring_platform
 
 
