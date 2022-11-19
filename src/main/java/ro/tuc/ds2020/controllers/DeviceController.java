@@ -1,11 +1,11 @@
 package ro.tuc.ds2020.controllers;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.tuc.ds2020.dtos.DeviceDTO;
+import ro.tuc.ds2020.dtos.MeasurementDTO;
 import ro.tuc.ds2020.services.DeviceService;
 
 import javax.validation.Valid;
@@ -54,6 +54,23 @@ public class DeviceController {
         return new ResponseEntity<>(deviceService.updateDeviceDetails(deviceDTO), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<List<DeviceDTO>> getDevicesByUser( @PathVariable("id") Long userId) {
 
+        List<DeviceDTO> dto = deviceService.findByUser(userId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/measurements/{id}")
+    public ResponseEntity<List<MeasurementDTO>> getMeasurementsForDevice( @PathVariable("id") Long deviceId) {
+        List<MeasurementDTO> dto = deviceService.findMeasurementsById(deviceId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/measurement/add")
+    public ResponseEntity<MeasurementDTO> insertMeasurement(@Valid @RequestBody MeasurementDTO measurementDTO) {
+        MeasurementDTO dto = deviceService.insertMeasurement(measurementDTO);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
 
 }

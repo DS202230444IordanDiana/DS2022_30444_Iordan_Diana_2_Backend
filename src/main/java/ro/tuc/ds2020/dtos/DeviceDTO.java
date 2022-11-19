@@ -14,5 +14,5 @@ public class DeviceDTO {
     private Long id;
     private String type;
     private String model;
-    private Long ownerId;
+    private String ownerUsername;
 }

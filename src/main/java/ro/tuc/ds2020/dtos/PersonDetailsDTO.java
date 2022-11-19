@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.tuc.ds2020.dtos.validators.annotation.AgeLimit;
+import ro.tuc.ds2020.entities.users.UserType;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -25,13 +26,16 @@ public class PersonDetailsDTO {
     private int age;
     @NotNull
     private String password;
+    private UserType role;
 
-    public PersonDetailsDTO(Long id, String username, String name, String address, int age) {
+    public PersonDetailsDTO(Long id, String username, String name, String address, int age, UserType userType, String password) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.address = address;
         this.age = age;
+        this.role = userType;
+        this.password = password;
     }
 
     public PersonDetailsDTO( String name, String address, int age) {

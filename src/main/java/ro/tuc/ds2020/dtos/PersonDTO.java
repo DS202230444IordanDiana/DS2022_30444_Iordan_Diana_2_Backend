@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
+import ro.tuc.ds2020.entities.users.UserType;
 
 import java.util.Objects;
 
@@ -20,6 +21,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> {
     private int age;
     private String password;
     private String username;
+    private UserType role;
 
     public PersonDTO(Long id, String name, int age ) {
         this.id = id;

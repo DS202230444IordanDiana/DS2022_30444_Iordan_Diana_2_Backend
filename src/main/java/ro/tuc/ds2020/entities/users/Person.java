@@ -44,4 +44,8 @@ public class Person extends User implements Serializable {
         this.password = password;
         this.setUserType(UserType.USER);
     }
+
+    public UserType getUserType(){
+        return super.getUserType();
+    }
 }

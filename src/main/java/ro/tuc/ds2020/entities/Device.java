@@ -8,6 +8,7 @@ import ro.tuc.ds2020.dtos.PersonDTO;
 import ro.tuc.ds2020.entities.users.Person;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +32,9 @@ public class Device {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private Person owner;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.REMOVE)
+    private List<Measurement> measurements;
 
     public Device(String type, String model, Person owner) {
         this.type = type;

@@ -16,7 +16,7 @@ public class DeviceBuilder {
                 device.getId(),
                 device.getType(),
                 device.getModel(),
-                device.getOwner().getId()
+                device.getOwner().getUsername()
         );
 
     }

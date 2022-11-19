@@ -1,28 +1,41 @@
-FROM maven:3.6.3-jdk-11 AS builder
+#FROM maven:latest AS builder
+#
+#COPY ./src/ /root/src
+#COPY ./pom.xml /root/
+#COPY ./checkstyle.xml /root/
+#WORKDIR /root
+#RUN mvn package
+##RUN java -Djarmode=layertools -jar /root/target/ds-2020-0.0.1-SNAPSHOT.jar list
+##RUN java -Djarmode=layertools -jar /root/target/ds-2020-0.0.1-SNAPSHOT.jar extract
+#RUN ls -l /root
+#
+#FROM eclipse-temurin:17
+#
+#ENV TZ=UTC
+#ENV DB_IP=localhost
+#ENV DB_PORT=8080
+#ENV DB_USER=root
+#ENV DB_DBNAME=city_db
+#
+#
+#COPY --from=builder /root/dependencies/ ./
+#COPY --from=builder /root/snapshot-dependencies/ ./
+#
+#RUN sleep 10
+#COPY --from=builder /root/spring-boot-loader/ ./
+#COPY --from=builder /root/application/ ./
+#ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher","-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m"]
 
-COPY ./src/ /root/src
-COPY ./pom.xml /root/
-COPY ./checkstyle.xml /root/
-WORKDIR /root
-RUN mvn package
-RUN java -Djarmode=layertools -jar /root/target/ds-2020-0.0.1-SNAPSHOT.jar list
-RUN java -Djarmode=layertools -jar /root/target/ds-2020-0.0.1-SNAPSHOT.jar extract
-RUN ls -l /root
 
-FROM openjdk:11.0.6-jre
+FROM maven:latest AS build-project
 
-ENV TZ=UTC
-ENV DB_IP=ec2-52-48-65-240.eu-west-1.compute.amazonaws.com
-ENV DB_PORT=6603
-ENV DB_USER=root
-ENV DB_PASSWORD=Vz%3?9It,g.FDr:+7dj61T:mRyd155&q
-ENV DB_DBNAME=monitoring_platform
+ADD . ./docker-spring-boot
+WORKDIR /docker-spring-boot
+RUN mvn clean install
 
 
-COPY --from=builder /root/dependencies/ ./
-COPY --from=builder /root/snapshot-dependencies/ ./
+FROM openjdk:17-alpine
+EXPOSE 8080
 
-RUN sleep 10
-COPY --from=builder /root/spring-boot-loader/ ./
-COPY --from=builder /root/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher","-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m"]
+COPY --from=build-project /docker-spring-boot/target/ds-2020-0.0.1-SNAPSHOT.jar ./docker-spring-boot.jar
+ENTRYPOINT ["java", "-jar","./docker-spring-boot.jar"]
