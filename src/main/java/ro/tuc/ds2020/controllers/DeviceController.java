@@ -73,4 +73,8 @@ public class DeviceController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/test")
+    public ResponseEntity<String> test() {
+       return new ResponseEntity<>("It works", HttpStatus.OK);
+    }
 }

@@ -1,27 +1,25 @@
 version: '3'
 
 services:
-
   demo-db:
     image: mysql
     restart: always
     environment:
       - MYSQL_DATABASE=monitoring_platform
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_HOST_AUTH_METHOD=trust
     ports:
-      - 3307:3306
+      - "3307:3306"
     container_name: demo-db
 
   demo-be:
-    image: be
+    image: monitoring-platform
     restart: always
     ports:
       - "8080:8080"
     environment:
-      #- DB_IP=172.22.0.2
       - DB_IP=demo-db
       - DB_PORT=3307
       - DB_USER=root
-      - DB_PASSWORD=password
+      - DB_PASSWORD=my-secret-pw
       - DB_DBNAME=monitoring_platform
