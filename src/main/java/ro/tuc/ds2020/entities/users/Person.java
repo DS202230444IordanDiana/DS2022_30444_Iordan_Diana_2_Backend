@@ -36,14 +36,15 @@ public class Person extends User implements Serializable {
     public Person() {
     }
 
-    public Person(String username, String name, String address, int age, String password) {
+    public Person(String username, String name, String address, int age, String password, UserType userType) {
         super.setUsername(username);
         this.name = name;
         this.address = address;
         this.age = age;
         this.password = password;
-        this.setUserType(UserType.USER);
+        this.setUserType(userType);
     }
+
 
     public UserType getUserType(){
         return super.getUserType();

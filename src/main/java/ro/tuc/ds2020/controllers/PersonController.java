@@ -45,6 +45,12 @@ public class PersonController {
         return new ResponseEntity<>(personID, HttpStatus.CREATED);
     }
 
+    @PostMapping(path="/create/admin")
+    public ResponseEntity<Long> insertAdmin(@Valid @RequestBody PersonDetailsDTO personDTO) {
+        Long personID = personService.insertAdmin(personDTO);
+        return new ResponseEntity<>(personID, HttpStatus.CREATED);
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<PersonDetailsDTO> getPersonById(@PathVariable("id") Long personId) {
         PersonDetailsDTO dto = personService.findPersonById(personId);

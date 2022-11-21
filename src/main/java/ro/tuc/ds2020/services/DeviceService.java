@@ -17,7 +17,6 @@ import ro.tuc.ds2020.repositories.DeviceRepository;
 import ro.tuc.ds2020.repositories.MeasurementsRepository;
 import ro.tuc.ds2020.repositories.PersonRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

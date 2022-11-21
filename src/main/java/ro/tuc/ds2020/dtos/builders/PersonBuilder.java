@@ -3,6 +3,7 @@ package ro.tuc.ds2020.dtos.builders;
 import ro.tuc.ds2020.dtos.PersonDTO;
 import ro.tuc.ds2020.dtos.PersonDetailsDTO;
 import ro.tuc.ds2020.entities.users.Person;
+import ro.tuc.ds2020.entities.users.UserType;
 
 public class PersonBuilder {
 
@@ -22,7 +23,16 @@ public class PersonBuilder {
                 personDetailsDTO.getName(),
                 personDetailsDTO.getAddress(),
                 personDetailsDTO.getAge(),
-                personDetailsDTO.getPassword());
+                personDetailsDTO.getPassword(),
+                UserType.USER);
+    }
 
+    public static Person toAdminEntity(PersonDetailsDTO personDetailsDTO) {
+        return new Person(personDetailsDTO.getUsername(),
+                personDetailsDTO.getName(),
+                personDetailsDTO.getAddress(),
+                personDetailsDTO.getAge(),
+                personDetailsDTO.getPassword(),
+                UserType.ADMIN);
     }
 }

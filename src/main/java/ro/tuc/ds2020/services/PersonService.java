@@ -10,6 +10,7 @@ import ro.tuc.ds2020.dtos.PersonDTO;
 import ro.tuc.ds2020.dtos.PersonDetailsDTO;
 import ro.tuc.ds2020.dtos.builders.PersonBuilder;
 import ro.tuc.ds2020.entities.users.Person;
+import ro.tuc.ds2020.entities.users.UserType;
 import ro.tuc.ds2020.repositories.PersonRepository;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class PersonService {
     }
 
     public List<PersonDTO> findPersons() {
-        List<Person> personList = personRepository.findAll();
+        List<Person> personList = personRepository.findAllByUserType(UserType.USER);
         return personList.stream()
                 .map(PersonBuilder::toPersonDTO)
                 .collect(Collectors.toList());
@@ -100,5 +101,12 @@ public class PersonService {
             throw new ResourceNotFoundException(Person.class.getSimpleName() + " with id: " + username);
         }
         return PersonBuilder.toPersonDetailsDTO(prosumerOptional.get());
+    }
+
+    public Long insertAdmin(PersonDetailsDTO personDTO) {
+        Person person = PersonBuilder.toAdminEntity(personDTO);
+        person = personRepository.save(person);
+        log.info("Admin with id {} was inserted in db", person.getId());
+        return person.getId();
     }
 }
