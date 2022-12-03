@@ -15,4 +15,5 @@ public class DeviceDTO {
     private String type;
     private String model;
     private String ownerUsername;
+    private long limit;
 }

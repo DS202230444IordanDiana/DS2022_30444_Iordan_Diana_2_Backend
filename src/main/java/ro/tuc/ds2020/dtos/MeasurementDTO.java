@@ -13,9 +13,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MeasurementDTO {
 
-    Long id;
-    LocalDateTime time;
-    int value;
-    long deviceId;
+    private Long id;
+    private LocalDateTime time;
+    private float value;
+    private long deviceId;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", time=" + time +
+                ", value=" + value +
+                ", deviceId=" + deviceId +
+                '}';
+    }
 }

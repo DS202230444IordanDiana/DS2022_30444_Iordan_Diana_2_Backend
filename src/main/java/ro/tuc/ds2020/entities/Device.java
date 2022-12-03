@@ -29,6 +29,9 @@ public class Device {
     @Column(nullable = false)
     private String model;
 
+    @Column(nullable = false)
+    private Long maxLimit;
+
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private Person owner;
@@ -42,8 +45,9 @@ public class Device {
         this.owner = owner;
     }
 
-    public Device(String type, String model) {
+    public Device(String type, String model, Long limit) {
         this.type = type;
         this.model = model;
+        this.maxLimit = limit;
     }
 }

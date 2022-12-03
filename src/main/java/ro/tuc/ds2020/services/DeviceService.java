@@ -17,6 +17,7 @@ import ro.tuc.ds2020.repositories.DeviceRepository;
 import ro.tuc.ds2020.repositories.MeasurementsRepository;
 import ro.tuc.ds2020.repositories.PersonRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,6 +103,10 @@ public class DeviceService {
                     updatedDevice.setModel(deviceDTO.getModel());
                 }
             }
+            if (deviceDTO.getLimit() != 0) {
+                    updatedDevice.setMaxLimit(deviceDTO.getLimit());
+
+            }
             if (deviceDTO.getType() != null) {
                 if (!deviceDTO.getType().isBlank()) {
                     updatedDevice.setType(deviceDTO.getType());
@@ -146,5 +151,26 @@ public class DeviceService {
             measurementsRepository.save(measurement);
             return MeasurementBuilder.toMeasurementDTO(measurement);
         }
+    }
+
+    public void checkHourlyConsumption(LocalDateTime currentTime, Long id){
+        Optional<Device> device = deviceRepository.findById(id);
+        List<Measurement> measurements = measurementsRepository.findAllByDeviceId(id);
+        if (!device.isPresent()) {
+            log.error("Device with id {} was not found in db",id);
+            throw new ResourceNotFoundException(Person.class.getSimpleName() + " with id: " + id);
+        } else {
+           List<Measurement> minuteMeasurements = measurements.stream().filter((e) -> { return e.getTime().getMinute() == currentTime.getMinute();}).collect(Collectors.toList());
+           float sum = 0;
+           for(Measurement m : minuteMeasurements){
+               sum += m.getValue();
+           }
+            System.out.println("Currently hour value: " + sum);
+           if(sum > device.get().getMaxLimit()){
+               System.out.println("Exceeded limit");
+               //TODO: push notification to frontend
+           }
+        }
+
     }
 }

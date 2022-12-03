@@ -8,7 +8,8 @@ public class DeviceBuilder {
     public static Device toEntity(DeviceDTO deviceDTO) {
         return new Device(
                 deviceDTO.getType(),
-                deviceDTO.getModel());
+                deviceDTO.getModel(),
+                deviceDTO.getLimit());
     }
 
     public static DeviceDTO toDeviceDTO(Device device){
@@ -16,7 +17,8 @@ public class DeviceBuilder {
                 device.getId(),
                 device.getType(),
                 device.getModel(),
-                device.getOwner().getUsername()
+                device.getOwner().getUsername(),
+                device.getMaxLimit()
         );
 
     }

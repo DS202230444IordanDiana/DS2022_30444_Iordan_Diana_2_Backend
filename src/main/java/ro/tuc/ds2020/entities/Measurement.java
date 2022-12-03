@@ -20,16 +20,25 @@ public class Measurement {
             sequenceName = "seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
-
     private LocalDateTime time;
-    private int value;
+    private float value;
 
     @ManyToOne
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
 
-    public Measurement(LocalDateTime time, int value) {
+    public Measurement(LocalDateTime time, float value) {
         this.time = time;
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Measurement{" +
+                "id=" + id +
+                ", time=" + time +
+                ", value=" + value +
+                ", device=" + device.getId() +
+                '}';
     }
 }
