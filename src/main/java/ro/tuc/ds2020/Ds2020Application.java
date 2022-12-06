@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.TimeZone;
 
 @SpringBootApplication
+@CrossOrigin
 @Validated
 public class Ds2020Application extends SpringBootServletInitializer {
     @Override

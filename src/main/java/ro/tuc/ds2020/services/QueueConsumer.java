@@ -28,7 +28,7 @@ public class QueueConsumer {
             MeasurementDTO measurement = jsonConverter.convertToMeasurement(fileBody);
             MeasurementDTO insertedMeasurment = deviceService.insertMeasurement(measurement);
             System.out.println("Inserted in db:" + insertedMeasurment.toString());
-            deviceService.checkHourlyConsumption(measurement.getTime(), measurement.getDeviceId());
+            deviceService.checkHourlyConsumption(insertedMeasurment);
         }catch (Exception e){
             e.printStackTrace();
         }

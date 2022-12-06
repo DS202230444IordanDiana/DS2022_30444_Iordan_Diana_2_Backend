@@ -1,9 +1,12 @@
 package ro.tuc.ds2020.services;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import ro.tuc.ds2020.controllers.handlers.exceptions.model.ResourceNotFoundException;
 import ro.tuc.ds2020.dtos.DeviceDTO;
@@ -12,11 +15,13 @@ import ro.tuc.ds2020.dtos.builders.DeviceBuilder;
 import ro.tuc.ds2020.dtos.builders.MeasurementBuilder;
 import ro.tuc.ds2020.entities.Device;
 import ro.tuc.ds2020.entities.Measurement;
+import ro.tuc.ds2020.entities.Notification;
 import ro.tuc.ds2020.entities.users.Person;
 import ro.tuc.ds2020.repositories.DeviceRepository;
 import ro.tuc.ds2020.repositories.MeasurementsRepository;
 import ro.tuc.ds2020.repositories.PersonRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class DeviceService {
 
 
@@ -31,14 +37,7 @@ public class DeviceService {
     private final PersonRepository personRepository;
     private final MeasurementsRepository measurementsRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceService.class);
-
-
-    @Autowired
-    public DeviceService(DeviceRepository deviceRepository, PersonRepository personRepository, MeasurementsRepository measurementsRepository) {
-        this.deviceRepository = deviceRepository;
-        this.personRepository = personRepository;
-        this.measurementsRepository = measurementsRepository;
-    }
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     public List<DeviceDTO> findDevices() {
 
@@ -104,7 +103,7 @@ public class DeviceService {
                 }
             }
             if (deviceDTO.getLimit() != 0) {
-                    updatedDevice.setMaxLimit(deviceDTO.getLimit());
+                updatedDevice.setMaxLimit(deviceDTO.getLimit());
 
             }
             if (deviceDTO.getType() != null) {
@@ -152,25 +151,39 @@ public class DeviceService {
             return MeasurementBuilder.toMeasurementDTO(measurement);
         }
     }
-
-    public void checkHourlyConsumption(LocalDateTime currentTime, Long id){
+    boolean checkTimeEquality(LocalDateTime currentTime, LocalDateTime time){
+        LocalDate firstDate = currentTime.toLocalDate();
+        LocalDate secondDate = time.toLocalDate();
+        return firstDate.equals(secondDate) && currentTime.getHour() == time.getHour() && currentTime.getMinute() == time.getMinute();
+    }
+    public void checkHourlyConsumption(MeasurementDTO measurement) {
+        LocalDateTime currentTime = measurement.getTime();
+        Long id = measurement.getDeviceId();
         Optional<Device> device = deviceRepository.findById(id);
         List<Measurement> measurements = measurementsRepository.findAllByDeviceId(id);
         if (!device.isPresent()) {
-            log.error("Device with id {} was not found in db",id);
+            log.error("Device with id {} was not found in db", id);
             throw new ResourceNotFoundException(Person.class.getSimpleName() + " with id: " + id);
         } else {
-           List<Measurement> minuteMeasurements = measurements.stream().filter((e) -> { return e.getTime().getMinute() == currentTime.getMinute();}).collect(Collectors.toList());
-           float sum = 0;
-           for(Measurement m : minuteMeasurements){
-               sum += m.getValue();
-           }
+            List<Measurement> minuteMeasurements = measurements.stream().filter((e) -> {
+                return checkTimeEquality(currentTime, e.getTime());
+            }).collect(Collectors.toList());
+            float sum = 0f;
+            for (Measurement m : minuteMeasurements) {
+                sum += m.getValue();
+            }
             System.out.println("Currently hour value: " + sum);
-           if(sum > device.get().getMaxLimit()){
-               System.out.println("Exceeded limit");
-               //TODO: push notification to frontend
-           }
+            String username = device.get().getOwner().getUsername();
+            if (sum > device.get().getMaxLimit()) {
+                System.out.println("Exceeded limit");
+                String text = "Device with id" + " " + device.get().getId() + " " + "exceed the maximum value." + " " + "Last measurement:" + measurement.getValue() + ". " + "Hourly consumption: " + sum + " Maximum value: " + device.get().getMaxLimit();
+                Notification notification = new Notification(username,text, device.get().getId(), LocalDateTime.now());
+                simpMessagingTemplate.convertAndSend("/all/messages/"+ username, notification);
+            }else{
+                String text = "Device with id" + " " + device.get().getId() + " " + "read the following value:" + measurement.getValue() + ". " + "Hourly consumption: " + sum + " Maximum value: " + device.get().getMaxLimit();
+                Notification notification = new Notification(username,text, device.get().getId(), LocalDateTime.now());
+                simpMessagingTemplate.convertAndSend("/all/messages/"+ username, notification);
+            }
         }
-
     }
 }
